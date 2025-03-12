@@ -10,7 +10,7 @@
 
 #### Dataset
 
- - I used the [TinyStories](https://huggingface.co/datasets/HuggingFaceFW/fineweb?row=0) dataset from HuggingFace.
+ - I used the [TinyStories](https://huggingface.co/datasets/roneneldan/TinyStories) dataset from HuggingFace.
 
   1) Train dataset - 2 M records approx
   2) Val dataset - 26K records approx
