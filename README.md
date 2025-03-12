@@ -21,7 +21,6 @@
 
 ####  ModelArgs (Hyperparameters)
 
-# Model Configuration
 
 Below is a table summarizing the configuration parameters for the model:
 
@@ -62,8 +61,8 @@ Below is a table summarizing the configuration parameters for the model:
 ---
 #### Hardware Setup
 
- - Used DPP using Pytorch torchrun consisting of 4x GeForce RTX 4090s (24gb VRAM each) rented on runpod.io
- - The model is a 1.5GB in size but needs around 5 GB of VRAM when loaded in fp32 precision
+ - Used DPP using Pytorch torchrun consisting of 2x GeForce RTX A100 AXM (80gb VRAM each) rented on runpod.io
+ - The model is a 0.768GB in size but needs around 4 GB of VRAM when loaded in fp32 precision
 ---
 
 #### Frameworks:
@@ -73,42 +72,30 @@ Below is a table summarizing the configuration parameters for the model:
 --- 
 
 #### Epochs/Steps
-- Iterations (train) = 45k
+- Iterations (train) = 5k 
 
-- Val iterations = every 1k
+- Val iterations = every 50 steps
 ---
 
 #### Losses
-- Train loss - 3.96
+- Train loss - 1.43
 
-- Val loss - 4.01
+- Val loss - 1.45
 
 ---
 
 #### Screenshots of the loss curves
 
-- Epoch 1 with CosineAnnealingWarmRestarts
+- Loss Curves (Train and Val)
 
-![Epoch 1 with CosineAnnealingWarmRestarts](images/epoch_1.jpg)
-
-- Epoch 2 with CosineAnnealing (checkpoint from epoch 1)
-
-![Epoch 2 with CosineAnnealing (checkpoint from epoch 1)](images/epoch_2.jpg)
-
-- Epoch 3 with CosineAnnealing (checkpoint from epoch 2)
-
-![Epoch 3 with CosineAnnealing (checkpoint from epoch 2)](images/epoch_3.jpg)
+![Loss Curves (Train and Val)](images/loss_curves.jpg)
 
 --- 
 #### Output
 
-- Prompt: It was a difficult time for me
+- Prompt: Once upon a time
 
-![Prompt: It was a difficult time for me](images/prompt1.jpg)
-
-- Prompt: My work life
-
-![Prompt: My work life](images/prompt2.jpg)
+![Prompt: Once upon a time](images/prompt1.jpg)
 
 ---
 
@@ -120,8 +107,8 @@ Below is a table summarizing the configuration parameters for the model:
 
 
 ```python
-git [clone the repo](https://github.com/YuvrajSingh-mist/SmolLlama.git)
-cd SmolLlama
+git [clone the repo](https://github.com/YuvrajSingh-mist/StoryLlama.git)
+cd StoryLlama
 bash ./install.sh
 
 ```
@@ -138,7 +125,7 @@ wandb login
 - Download the model
 
 ```python
-python donwload_model_weight.py
+python download_model_weight.py
 ```
 
 
@@ -149,21 +136,44 @@ python donwload_model_weight.py
 
 #### Training a model
 
-- Kindly hange 'device' to any of your available cuda gpus.
+- Kindly change 'device' to any of your available cuda gpus.
 
 To run:
 
 ```python
-torchrun --standalone --nproc_per_node=gpu llama.py \   
+torchrun --standalone --nproc_per_node=gpu trainer.py \
     --epochs 10 \
     --block_size 256 \
-    --batch_size 32 \
-    --embeddings_dims 1024 \
-    --no_of_heads 8 \
-    --max_lr 3e-4 \
+    --batch_size 128 \
+    --embeddings_dims 768 \
+    --attn_dropout 0.2 \
+    --no_of_heads 12 \
+    --dropout 0.2 \
+    --val_epochs 3 \
+    --max_lr 5e-4 \
+    --no_of_decoder_layers 6 \
+    --weight_decay_optim 0.01 \
+    --beta_1 0.85 \
+    --beta_2 0.99 \
+    --clip 0.5 \
+    --device "cuda" \
+    --no_kv_heads 4 \
+    --vocab_size 50257 \
+    --eps 1e-6 \
+    --dtype "float16" \
+    --save_checkpoint_dir "model_checkpoints" \
     --prompt "Once upon a time" \
-    --max_length 100 \
-    --temperature 0.8
+    --save_checkpoint_iter 100 \
+    --total_iters 5000 \
+    --eval_iters 200 \
+    --eval_check 500 \
+    --warmup_iters 1000 \
+    --min_lr 1e-5 \
+    --lr_decay_iters 2000 \
+    --total_batch_size 262144 \
+    --micro_batch_size 128 \
+    --gradient_accumulation_steps 4
+
 ```
 --standalone - if all the gpu are on one server
 --npro_per_node - number of gpus available and use the keyword gpu to use all
@@ -171,6 +181,6 @@ torchrun --standalone --nproc_per_node=gpu llama.py \
 #### Inference on a model
 
 ```python 
-python inference.py --prompt "Once upon a time" --max_length 100 --temperature 0.8 --repetition_penalty 1.5 
+python inference.py --prompt "Once upon a time" --max_length 100 --temperature 0.8 --topk 50 
 ```
 
