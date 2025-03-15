@@ -141,6 +141,10 @@ python download_model_weight.py
 To run:
 
 ```python
+bash ./install.sh
+```
+
+```python
 torchrun --standalone --nproc_per_node=gpu trainer.py \
     --epochs 10 \
     --block_size 256 \
