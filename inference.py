@@ -57,6 +57,8 @@ def main():
     parser.add_argument("--prompt", type=str, default="Once upon a time")
     parser.add_argument("--max_length", type=int, default=128)
     parser.add_argument("--temperature", type=float, default=1.0)
+    parser.add_argument("--top_k", type=int, default=50)
+    
     # parser.add_argument("--repetition_penalty", type=float, default=1.2)
     args = parser.parse_args()
     
