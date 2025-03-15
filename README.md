@@ -57,7 +57,7 @@ Below is a table summarizing the configuration parameters for the model:
 | `lr_decay_iters`               | Number of iterations for learning rate decay                               | `10000`                           | `int`     |
 | `total_batch_size`             | Total batch size across all devices                                         | `524288`                          | `int`     |
 | `micro_batch_size`             | Micro batch size per device                                                | `batch_size`                      | `int`     |
-| `gradient_accumulation_steps`  | Gradient accumulation steps                                                 | `total_batch_size // (micro_batch_size * (block_size * torch.cuda.device_count()))` | `int` |
+| `gradient_accumulation_steps`  | Gradient accumulation steps                                                 | 524288 | `int` |
 ---
 #### Hardware Setup
 
