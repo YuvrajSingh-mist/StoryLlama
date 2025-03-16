@@ -66,7 +66,7 @@ def main():
     # model = torch.compile(model)
     model = model.to(ModelArgs.device)
 
-    dict_model = torch.load('snapshot_4650.pt')
+    dict_model = torch.load('weights/pretrained/snapshot_4650.pt')
     dict_model['MODEL_STATE'] = remove_prefix(dict_model['MODEL_STATE'], '_orig_mod.')
     model.load_state_dict(dict_model['MODEL_STATE'])
     model.eval()
