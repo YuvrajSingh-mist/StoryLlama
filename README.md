@@ -125,7 +125,9 @@ wandb login
 - Download the model
 
 ```python
-python download_model_weight.py
+cd gradio/
+
+python app.py
 ```
 
 
