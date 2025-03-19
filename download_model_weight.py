@@ -99,7 +99,7 @@ def download_model(repo_id, filename, cache_dir):
 def main():
     parser = argparse.ArgumentParser(description="Download models from Hugging Face Hub")
     parser.add_argument("--model_type", 
-                      choices=["sft", "dpo", "pretrained"],
+                      choices=["pretrained"],
                       required=True,
                       help="Type of model to download")
     
@@ -108,8 +108,8 @@ def main():
     model_config = {
 
         "pretrained": {
-            "repo_id": "YuvrajSingh9886/smol-llama-base",
-            "filename": "snapshot_6750.pt",
+            "repo_id": "YuvrajSingh9886/StoryLlama",
+            "filename": "snapshot_4650.pt",
             "cache_dir": "weights/pretrained"
         }
     }
